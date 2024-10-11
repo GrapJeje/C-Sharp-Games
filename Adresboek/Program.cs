@@ -450,6 +450,27 @@ public class AddressBook
                 + "-------------------------------------------\n");
     }
 
+    public bool CheckPerson(List<Person> foundPersons)
+    {
+        if (foundPersons.Count == 0)
+        {
+            Console.WriteLine("Er is niemand gevonden met deze naam.");
+            return true;
+        }
+
+        if (foundPersons.Count > 1)
+        {
+            Console.WriteLine("De volgende mensen zijn gevonden met deze naam. Specificeer beter:");
+            foreach (var person in foundPersons)
+            {
+                Address associatedAddress = addresses[person];
+                AdressList(associatedAddress, person);
+            }
+            return true;
+        }
+
+        return false;
+    }
 
     public Dictionary<Person, Address> GetNames(string input)
     {
@@ -546,23 +567,8 @@ public class AddressBook
             .Where(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
             .ToList();
 
-        if (foundPersons.Count == 0)
-        {
-            Console.WriteLine("Er is niemand gevonden met deze naam.");
-            return;
-        }
-        else if (foundPersons.Count > 1)
-        {
-            Console.WriteLine("De volgende mensen zijn gevonden met deze naam. Specificeer beter:");
-            foreach (var person in foundPersons)
+        if (!CheckPerson(foundPersons))
             {
-                Address associatedAddress = addresses[person];
-                AdressList(associatedAddress, person);
-            }
-            return;
-        }
-        else
-        {
             Person foundPerson = foundPersons.First();
             foundPerson.Email = email;
 
@@ -581,22 +587,7 @@ public class AddressBook
             .Where(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
             .ToList();
 
-        if (foundPersons.Count == 0)
-        {
-            Console.WriteLine("Er is niemand gevonden met deze naam.");
-            return;
-        }
-        else if (foundPersons.Count > 1)
-        {
-            Console.WriteLine("De volgende mensen zijn gevonden met deze naam. Specificeer beter:");
-            foreach (var person in foundPersons)
-            {
-                Address associatedAddress = addresses[person];
-                AdressList(associatedAddress, person);
-            }
-            return;
-        }
-        else
+        if (!CheckPerson(foundPersons))
         {
             Person foundPerson = foundPersons.First();
             foundPerson.PhoneNumber = phoneNumber;
@@ -616,22 +607,7 @@ public class AddressBook
             .Where(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
             .ToList();
 
-        if (foundPersons.Count == 0)
-        {
-            Console.WriteLine("Er is niemand gevonden met deze naam.");
-            return;
-        }
-        else if (foundPersons.Count > 1)
-        {
-            Console.WriteLine("De volgende mensen zijn gevonden met deze naam. Specificeer beter:");
-            foreach (var person in foundPersons)
-            {
-                Address associatedAddress = addresses[person];
-                AdressList(associatedAddress, person);
-            }
-            return;
-        }
-        else
+        if (!CheckPerson(foundPersons))
         {
             Person foundPerson = foundPersons.First();
             Address associatedAddress = addresses[foundPerson];
@@ -652,22 +628,7 @@ public class AddressBook
             .Where(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
             .ToList();
 
-        if (foundPersons.Count == 0)
-        {
-            Console.WriteLine("Er is niemand gevonden met deze naam.");
-            return;
-        }
-        else if (foundPersons.Count > 1)
-        {
-            Console.WriteLine("De volgende mensen zijn gevonden met deze naam. Specificeer beter:");
-            foreach (var person in foundPersons)
-            {
-                Address associatedAddress = addresses[person];
-                AdressList(associatedAddress, person);
-            }
-            return;
-        }
-        else
+        if (!CheckPerson(foundPersons))
         {
             Person foundPerson = foundPersons.First();
             Address associatedAddress = addresses[foundPerson];
@@ -688,22 +649,7 @@ public class AddressBook
             .Where(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
             .ToList();
 
-        if (foundPersons.Count == 0)
-        {
-            Console.WriteLine("Er is niemand gevonden met deze naam.");
-            return;
-        }
-        else if (foundPersons.Count > 1)
-        {
-            Console.WriteLine("De volgende mensen zijn gevonden met deze naam. Specificeer beter:");
-            foreach (var person in foundPersons)
-            {
-                Address associatedAddress = addresses[person];
-                AdressList(associatedAddress, person);
-            }
-            return;
-        }
-        else
+        if (!CheckPerson(foundPersons))
         {
             Person foundPerson = foundPersons.First();
             Address associatedAddress = addresses[foundPerson];
@@ -724,22 +670,7 @@ public class AddressBook
             .Where(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
             .ToList();
 
-        if (foundPersons.Count == 0)
-        {
-            Console.WriteLine("Er is niemand gevonden met deze naam.");
-            return;
-        }
-        else if (foundPersons.Count > 1)
-        {
-            Console.WriteLine("De volgende mensen zijn gevonden met deze naam. Specificeer beter:");
-            foreach (var person in foundPersons)
-            {
-                Address associatedAddress = addresses[person];
-                AdressList(associatedAddress, person);
-            }
-            return;
-        }
-        else
+        if (!CheckPerson(foundPersons))
         {
             Person foundPerson = foundPersons.First();
             Address associatedAddress = addresses[foundPerson];
@@ -755,22 +686,7 @@ public class AddressBook
             .Where(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
             .ToList();
 
-        if (foundPersons.Count == 0)
-        {
-            Console.WriteLine("Er is niemand gevonden met deze naam.");
-            return;
-        }
-        else if (foundPersons.Count > 1)
-        {
-            Console.WriteLine("De volgende mensen zijn gevonden met deze naam. Specificeer beter:");
-            foreach (var person in foundPersons)
-            {
-                Address associatedAddress = addresses[person];
-                AdressList(associatedAddress, person);
-            }
-            return;
-        }
-        else
+        if (!CheckPerson(foundPersons))
         {
             Thread.Sleep(300);
             Person foundPerson = foundPersons.First();
