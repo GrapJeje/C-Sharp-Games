@@ -57,25 +57,7 @@ public class program
             Console.Write("Voer jouw keuze in: \n");
             string input = Console.ReadLine();
 
-            // Stop the program if user put in 'x'
-            if (input.ToLower() == "x")
-            {
-                break;
-            }
-
-            if (!int.TryParse(input, out int user_choice))
-            {
-                Console.WriteLine("Ongeldige invoer, voer een getal in.\n");
-                continue;
-            }
-
-            if (!(user_choice >= 1 && user_choice <= 5))
-            {
-                Console.WriteLine("Ongeldige keuze, kies uit 1 t/m 5.\n");
-                continue;
-            }
-
-            switch(user_choice)
+            switch(menuInput(input, 5))
             {
                 case 1:
                     {
@@ -97,24 +79,7 @@ public class program
                         FilterOn();
                         string FilterInput = Console.ReadLine();
 
-                        if (FilterInput.ToLower() == "x")
-                        {
-                            continue;
-                        }
-                        else if (!int.TryParse(FilterInput, out int Filter_User_Choice))
-                        {
-                            Console.WriteLine("Ongeldige invoer, voer een getal in.\n");
-                            continue;
-                        }
-                        else if (!(Filter_User_Choice >= 1 && Filter_User_Choice <= 6))
-                        {
-                            Console.WriteLine("Ongeldige keuze, kies uit 1 t/m 6.\n");
-                            continue;
-                        }
-                        else
-                        {
-                            Filter(Filter_User_Choice, addressBook);
-                        }
+                        Filter(menuInput(input, 6), addressBook);
                         break;
                     }
                 case 3:
@@ -212,174 +177,65 @@ public class program
         EditAdress();
         string EditInput = Console.ReadLine();
 
-        if (EditInput.ToLower() == "x")
-        {
-            return;
-        }
-        else if (!int.TryParse(EditInput, out int Edit_User_Choice))
-        {
-            Console.WriteLine("Ongeldige invoer, voer een getal in.\n");
-            return;
-        }
-        else if (!(Edit_User_Choice >= 1 && Edit_User_Choice <= 6))
-        {
-            Console.WriteLine("Ongeldige keuze, kies uit 1 t/m 6.\n");
-            return;
-        }
-        else
-        {
-            Console.WriteLine("Geef graag een (oude)naam op om aan te passen!");
-            string name = Console.ReadLine();
+        Console.WriteLine("Geef graag een (oude)naam op om aan te passen!");
+        string name = Console.ReadLine();
 
-            switch(Edit_User_Choice)
+        foreach (var entry in addressList)
+        {
+            Person person = entry.Key;
+            Address address = entry.Value;
+
+            if (person.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
             {
-                case 1:
-                    {
-                        foreach (var entry in addressList)
+                switch (menuInput(EditInput, 6))
+                {
+                    case 1:
                         {
-                            Person person = entry.Key;
-                            Address address = entry.Value;
-
-                            if (person.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
-                            {
-                                Console.WriteLine("Wat wordt de nieuwe naam?:");
-                                addressBook.setName(Console.ReadLine(), name);
-
-                                AddressBook.AdressList(address, person);
-                                Thread.Sleep(200);
-                                break;
-                            }
+                            Console.WriteLine("Wat wordt de nieuwe naam?:");
+                            addressBook.setName(Console.ReadLine(), name);
+                            break;
                         }
-
-                        Thread.Sleep(1000);
-                        break;
-                    }
-                case 2:
-                    {
-                        foreach (var entry in addressList)
+                    case 2:
                         {
-                            Person person = entry.Key;
-                            Address address = entry.Value;
-
-                            if(person.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
-                            {
-                                Console.WriteLine("Wat word de nieuwe E-mail adres?:");
+                            Console.WriteLine("Wat word de nieuwe E-mail adres?:");
                             addressBook.setEmail(name, Console.ReadLine());
-
-                            AddressBook.AdressList(address, person);
-                            Thread.Sleep(200);
                             break;
-                            }
                         }
-
-                        Thread.Sleep(1000);
-                        break;
-                    }
-                case 3:
-                    {
-                        foreach (var entry in addressList)
+                    case 3:
                         {
-                            Person person = entry.Key;
-                            Address address = entry.Value;
-
-                            if (person.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
-                            {
-                                Console.WriteLine("Wat word het nieuwe telefoon nummer?:");
+                            Console.WriteLine("Wat word het nieuwe telefoon nummer?:");
                             addressBook.setPhoneNumber(name, Console.ReadLine());
-
-                            AddressBook.AdressList(address, person);
-                            Thread.Sleep(200);
                             break;
-                            }
                         }
-
-                        Thread.Sleep(1000);
-                        break;
-                    }
-                case 4:
-                    {
-                        foreach (var entry in addressList)
+                    case 4:
                         {
-                            Person person = entry.Key;
-                            Address address = entry.Value;
-
-                            if (person.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
-                            {
-                                Console.WriteLine("Wat word de nieuwe straatnaam?:");
+                            Console.WriteLine("Wat word de nieuwe straatnaam?:");
                             addressBook.setStreetName(name, Console.ReadLine());
-
-                            AddressBook.AdressList(address, person);
-                            Thread.Sleep(200);
                             break;
-                            }
                         }
-
-                        Thread.Sleep(1000);
-                        break;
-                    }
-                case 5:
-                    {
-                        foreach (var entry in addressList)
+                    case 5:
                         {
-                            Person person = entry.Key;
-                            Address address = entry.Value;
-
-                            if (person.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
-                            {
-                                Console.WriteLine("Wat word het nieuwe huisnummer?:");
+                            Console.WriteLine("Wat word het nieuwe huisnummer?:");
                             addressBook.setHouseNumber(name, Console.ReadLine());
-
-                            AddressBook.AdressList(address, person);
-                            Thread.Sleep(200);
                             break;
-                            }
                         }
-
-                        Thread.Sleep(1000);
-                        break;
-                    }
-                case 6:
-                    {
-                        foreach (var entry in addressList)
+                    case 6:
                         {
-                            Person person = entry.Key;
-                            Address address = entry.Value;
-
-                            if (person.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
-                            {
-                                Console.WriteLine("Wat word het nieuwe stad/dorp?:");
+                            Console.WriteLine("Wat word het nieuwe stad/dorp?:");
                             addressBook.setCity(name, Console.ReadLine());
-
-                            AddressBook.AdressList(address, person);
-                            Thread.Sleep(200);
                             break;
-                            }
                         }
-
-                        Thread.Sleep(1000);
-                        break;
-                    }
-                case 7:
-                    {
-                        foreach (var entry in addressList)
+                    case 7:
                         {
-                            Person person = entry.Key;
-                            Address address = entry.Value;
-
-                            if (person.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
-                            {
-                                Console.WriteLine("Wat word de nieuwe postcode?:");
+                            Console.WriteLine("Wat word de nieuwe postcode?:");
                             addressBook.setPostCode(name, Console.ReadLine());
-
-                            AddressBook.AdressList(address, person);
-                            Thread.Sleep(200);
                             break;
-                            }
                         }
+                }
 
-                        Thread.Sleep(1000);
-                        break;
-                    }
+                AddressBook.AdressList(address, person);
+                Thread.Sleep(200);
+                break;
             }
         }
     }
@@ -517,6 +373,31 @@ public class program
             + "7 - Postcode\n"
             + "\nx - Voer 'x' in om terug te gaan.\n"
             + "\n-------------------------------------------\n");
+    }
+
+    static int menuInput(string input, int max)
+    {
+        // Stop the program if user put in 'x'
+        if (input.ToLower() == "x")
+        {
+            Environment.Exit(0);
+        }
+
+        // Check if input is a number
+        if (!int.TryParse(input, out int user_choice))
+        {
+            Console.WriteLine("Ongeldige invoer, voer een getal in.\n");
+            return 0;
+        }
+
+        // Check if there is an option with that number
+        if (!(user_choice >= 1 && user_choice <= max))
+        {
+            Console.WriteLine($"Ongeldige keuze, kies uit 1 t/m {max}.\n");
+            return 0;
+        }
+
+        return user_choice;
     }
 }
 public class Person
