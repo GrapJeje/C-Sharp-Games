@@ -54,10 +54,7 @@ public class program
         while (true)
         {
             ChoiceMenu();
-            Console.Write("Voer jouw keuze in: \n");
-            string input = Console.ReadLine();
-
-            switch(menuInput(input, 5))
+            switch(MenuInput(SendConsoleMessage("Voer jouw keuze in: \n"), 5))
             {
                 case 1:
                     {
@@ -76,19 +73,13 @@ public class program
                 case 2:
                     {
                         // Filter menu
-                        FilterOn();
-                        string FilterInput = Console.ReadLine();
-
-                        Filter(menuInput(input, 6), addressBook);
+                        Filter(MenuInput(SendConsoleMessage(FilterOn()), 6), addressBook);
                         break;
                     }
                 case 3:
                     {
                         // Add someone
-                        Console.WriteLine("\nVoeg hier een naam in:");
-                        string Name = Console.ReadLine();
-
-                        AddUser(addressBook, Name);
+                        AddUser(addressBook, SendConsoleMessage("\nVoeg hier een naam in:"));
                         break;
                     }
                 case 4:
@@ -100,9 +91,7 @@ public class program
                 case 5:
                     {
                         // Remove someone
-                        Console.WriteLine("Geef een naam op die je wilt verwijderen:");
-                        string Name = Console.ReadLine();
-                        RemoveUser(addressBook, Name);
+                        RemoveUser(addressBook, SendConsoleMessage("\nGeef een naam op die je wilt verwijderen:"));
                         break;
                     }
                 default:
@@ -115,23 +104,17 @@ public class program
     {
         addressBook.setName(Name, Name);
 
-        Console.WriteLine("\nVoeg hier een email in:");
-        addressBook.setEmail(Name, Console.ReadLine());
+        addressBook.setEmail(Name, SendConsoleMessage("\nVoeg hier een email in:"));
 
-        Console.WriteLine("\nVoeg hier een telefoon nummer in:");
-        addressBook.setPhoneNumber(Name, Console.ReadLine());
+        addressBook.setPhoneNumber(Name, SendConsoleMessage("\nVoeg hier een telefoon nummer in:"));
 
-        Console.WriteLine("\nVoeg hier een straat naam in:");
-        addressBook.setStreetName(Name, Console.ReadLine());
+        addressBook.setStreetName(Name, SendConsoleMessage("\nVoeg hier een straat naam in:"));
 
-        Console.WriteLine("\nVoeg hier een huisnummer in:");
-        addressBook.setHouseNumber(Name, Console.ReadLine());
+        addressBook.setHouseNumber(Name, SendConsoleMessage("\nVoeg hier een huisnummer in:"));
 
-        Console.WriteLine("\nVoeg hier een dorp/stad naam in:");
-        addressBook.setCity(Name, Console.ReadLine());
+        addressBook.setCity(Name, SendConsoleMessage("\nVoeg hier een woonplaats naam in:"));
 
-        Console.WriteLine("\nVoeg hier een postcode in:");
-        addressBook.setPostCode(Name, Console.ReadLine());
+        addressBook.setPostCode(Name, SendConsoleMessage("\nVoeg hier een postcode in:"));
 
         Thread.Sleep(200);
         Console.WriteLine("\nContact is toegevoegd!");
@@ -174,11 +157,7 @@ public class program
 
     static void EditUser(AddressBook addressBook, Dictionary<Person, Address> addressList)
     {
-        EditAdress();
-        string EditInput = Console.ReadLine();
-
-        Console.WriteLine("Geef graag een (oude)naam op om aan te passen!");
-        string name = Console.ReadLine();
+        string name = SendConsoleMessage("Geef graag een (oude)naam op om aan te passen!");
 
         foreach (var entry in addressList)
         {
@@ -187,48 +166,41 @@ public class program
 
             if (person.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
             {
-                switch (menuInput(EditInput, 6))
+                switch (MenuInput(SendConsoleMessage(EditAdress()), 6))
                 {
                     case 1:
                         {
-                            Console.WriteLine("Wat wordt de nieuwe naam?:");
-                            addressBook.setName(Console.ReadLine(), name);
+                            addressBook.setName(SendConsoleMessage("Wat wordt de nieuwe naam?:"), name);
                             break;
                         }
                     case 2:
                         {
-                            Console.WriteLine("Wat word de nieuwe E-mail adres?:");
-                            addressBook.setEmail(name, Console.ReadLine());
+                            addressBook.setEmail(name, SendConsoleMessage("Wat word de nieuwe E-mail adres?:"));
                             break;
                         }
                     case 3:
                         {
-                            Console.WriteLine("Wat word het nieuwe telefoon nummer?:");
-                            addressBook.setPhoneNumber(name, Console.ReadLine());
+                            addressBook.setPhoneNumber(name, SendConsoleMessage("Wat word het nieuwe telefoon nummer?:"));
                             break;
                         }
                     case 4:
                         {
-                            Console.WriteLine("Wat word de nieuwe straatnaam?:");
-                            addressBook.setStreetName(name, Console.ReadLine());
+                            addressBook.setStreetName(name, SendConsoleMessage("Wat word de nieuwe straatnaam?:"));
                             break;
                         }
                     case 5:
                         {
-                            Console.WriteLine("Wat word het nieuwe huisnummer?:");
-                            addressBook.setHouseNumber(name, Console.ReadLine());
+                            addressBook.setHouseNumber(name, SendConsoleMessage("Wat word het nieuwe huisnummer?:"));
                             break;
                         }
                     case 6:
                         {
-                            Console.WriteLine("Wat word het nieuwe stad/dorp?:");
-                            addressBook.setCity(name, Console.ReadLine());
+                            addressBook.setCity(name, SendConsoleMessage("Wat word het nieuwe woonplaats?:"));
                             break;
                         }
                     case 7:
                         {
-                            Console.WriteLine("Wat word de nieuwe postcode?:");
-                            addressBook.setPostCode(name, Console.ReadLine());
+                            addressBook.setPostCode(name, SendConsoleMessage("Wat word de nieuwe postcode?:"));
                             break;
                         }
                 }
@@ -272,8 +244,7 @@ public class program
     static void Filter(int input, AddressBook addressBook)
     {
 
-        Console.WriteLine("Voer een zoekterm in: ");
-        string FilterInput = Console.ReadLine();
+        string FilterInput = SendConsoleMessage("Voer een zoekterm in: ");
         Dictionary<Person, Address> filteredAddresses = new Dictionary<Person, Address>();
 
         switch (input)
@@ -345,37 +316,37 @@ public class program
             + "\n-------------------------------------------\n");
     }
 
-    static void FilterOn()
+    static string FilterOn()
     {
-        Console.WriteLine("-------------------------------------------\n"
+        return ("-------------------------------------------\n"
             + "Filteren op:\n"
             + "\n1 - Naam\n"
             + "2 - E-mail \n"
             + "3 - Telefoon Nummer\n"
             + "4 - Straatnaam\n"
             + "5 - Huisnummer\n"
-            + "6 - Stad/Dorp\n"
+            + "6 - Woonplaats\n"
             + "7 - Postcode\n"
             + "\nx - Voer 'x' in om terug te gaan.\n"
             + "\n-------------------------------------------\n");
     }
 
-    static void EditAdress()
+    static string EditAdress()
     {
-        Console.WriteLine("-------------------------------------------\n"
+        return ("-------------------------------------------\n"
             + "Wat wil je editen?:\n"
             + "\n1 - Naam\n"
             + "2 - E-mail \n"
             + "3 - Telefoon Nummer\n"
             + "4 - Straatnaam\n"
             + "5 - Huisnummer\n"
-            + "6 - Stad/Dorp\n"
+            + "6 - Woonplaats\n"
             + "7 - Postcode\n"
             + "\nx - Voer 'x' in om terug te gaan.\n"
             + "\n-------------------------------------------\n");
     }
 
-    static int menuInput(string input, int max)
+    static int MenuInput(string input, int max)
     {
         // Stop the program if user put in 'x'
         if (input.ToLower() == "x")
@@ -398,6 +369,12 @@ public class program
         }
 
         return user_choice;
+    }
+
+    public static string SendConsoleMessage(string message)
+    {
+        Console.WriteLine (message);
+        return Console.ReadLine();
     }
 }
 public class Person
@@ -655,7 +632,7 @@ public class AddressBook
             Address associatedAddress = addresses[foundPerson];
             associatedAddress.City = CityName;
 
-            Console.WriteLine($"Stad/Dorp van {foundPerson.Name} succesvol aangepast naar {CityName}.");
+            Console.WriteLine($"Woonplaats van {foundPerson.Name} succesvol aangepast naar {CityName}.");
         }
     }
 
