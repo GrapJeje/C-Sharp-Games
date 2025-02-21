@@ -1,24 +1,19 @@
 ﻿namespace TBAG.Models;
 
-public class Player
+public class Player(string username)
 {
-    private string username { get; set; }
-    private string lastChoice { get; set; }
-    private Dictionary<string, int> inventory { get; set; } = new Dictionary<string, int>();
-    
-    public Player(string username)
-    {
-        this.username = username;
-    }
-    
+    private string Username { get; set; } = username;
+    private string? LastChoice { get; set; }
+    private Dictionary<string, int> Inventory { get; set; } = new Dictionary<string, int>();
+
     public string GetUsername()
     {
-        return username;
+        return Username;
     }
     
     public void AddToInventory(string item, int count)
     {
-        inventory.Add(item, count);
+        Inventory.Add(item, count);
         Console.ForegroundColor = ConsoleColor.Green;
         Console.Write("+ " + count);
         Console.ResetColor();
@@ -27,36 +22,36 @@ public class Player
     
     public void RemoveFromInventory(string item, int count)
     {
-        int amount = inventory[item];
+        int amount = Inventory[item];
 
         if (amount > count)
         {
             int newAmount = amount - count;
-            inventory[item] = newAmount;
+            Inventory[item] = newAmount;
         }
         else
         {
-            inventory.Remove(item);
+            Inventory.Remove(item);
         }
 
-        Console.ForegroundColor = ConsoleColor.Green;
-        Console.Write("\n+ " + count);
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.Write("- " + count);
         Console.ResetColor();
         Console.WriteLine(" " + item);
     }
     
-    public Dictionary<string, int> GetInventory()
+    public bool HasItem(string item)
     {
-        return inventory;
+        return Inventory.ContainsKey(item);
     }
     
     public void SetLastChoice(string choice)
     {
-        lastChoice = choice;
+        LastChoice = choice;
     }
     
-    public string GetLastChoice()
+    public string? GetLastChoice()
     {
-        return lastChoice;
+        return LastChoice;
     }
 }

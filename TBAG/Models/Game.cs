@@ -1,26 +1,45 @@
 ﻿using TBAG.Helpers;
+using TBAG.Models.Questions;
 
 namespace TBAG.Models;
 
 public class Game
 {
-    private bool isRunning = true;
-    private Player player { get; set; }
-    
+    private bool _isRunning = true;
+    private readonly int _currentQuestionId = 1;
+    private Player _player = null!;
+
     public Game()
     {
-        register();
-        writeStartStory();
+        Register();
+        WriteStartStory();
         
-        while (isRunning)
+        Dictionary<int, GameQuestion> questions = new()
         {
-            question1();
-            question2();
-            question3();
+            { 1, new Question1(this) },
+            { 2, new Question2(this) },
+            { 3, new Question3(this) },
+            { 4, new Question4(this) },
+            { 5, new Question5(this) },
+            { 6, new Question6(this) }
+        };
+        
+        while (_isRunning)
+        {
+            if (questions.ContainsKey(_currentQuestionId))
+            {
+                questions[_currentQuestionId].ShowQuestion();
+                _currentQuestionId++;
+            }
+            else
+            {
+                _isRunning = false;
+                GameOver(false, "Er is iets fout gegaan.");
+            }
         }
     }
 
-    private void register()
+    private void Register()
     {
         string? username = null;
         while (username == null || username.Length < 3)
@@ -28,7 +47,7 @@ public class Game
             Console.Clear();
             Text.WriteGameName();
             
-            if (username != null && username.Length < 3)
+            if (username is { Length: < 3 })
             {
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Username moet minimaal 3 karakters bevatten.");
@@ -40,10 +59,10 @@ public class Game
             username = Console.ReadLine();
             Console.ResetColor();
         }
-        player = new Player(username);
+        _player = new Player(username);
     }
 
-    private void writeStartStory()
+    private void WriteStartStory()
     {
         GameHelper.showLoading();
         
@@ -67,192 +86,46 @@ public class Game
         Text.Narrator("\nHet avontuur begint nu!");
         Thread.Sleep(1500);
         
-        player.AddToInventory("Backpack", 1);
+        _player.AddToInventory("Backpack", 1);
         Thread.Sleep(1500);
     }
     
-    private void question1()
+    public Player GetPlayer()
     {
-        GameHelper.showLoading();
+        return _player;
+    }
+
+    public void GameOver(bool won, string? deathMessage)
+    {
         Console.Clear();
         Text.WriteGameName();
         Thread.Sleep(1000);
-        
-        Text.Narrator("Na een lange tocht door het dichte woud kom je bij een splitsing...");
-        Thread.Sleep(3000);
 
-        Text.Narrator("Links zie je een smalle doorgang naar een donkere, mysterieuze grot.");
-        Thread.Sleep(3000);
-
-        Text.Narrator("Rechts leidt een oud, kronkelig pad naar een verlaten dorp.");
-        Thread.Sleep(3000);
-
-        Console.Write("\nWat kies je? Typ 'links' of 'rechts': ");
-        string choice = Console.ReadLine().ToLower();
-
-        if (choice == "links" || choice == "l")
+        if (won)
         {
-            Console.Clear();
-            Text.WriteGameName();
-            Thread.Sleep(1000);
-            
-            Text.Narrator("Je ademt diep in en stapt de donkere grot binnen...");
+            Text.Narrator("Gefeliciteerd! Je hebt het avontuur overleefd.");
             Thread.Sleep(2000);
-            player.SetLastChoice("grot");
-        }
-        else if (choice == "rechts" || choice == "r")
-        {
-            Console.Clear();
-            Text.WriteGameName();
-            Thread.Sleep(1000);
-            
-            Text.Narrator("Je kiest het kronkelige pad en loopt richting het verlaten dorp...");
-            Thread.Sleep(2000);
-
-            Text.Narrator("De huizen zijn vervallen en de wind waait door de kapotte ramen.");
-            Thread.Sleep(2000);
-
-            Text.Narrator("Je hebt het gevoel dat je wordt bekeken... maar door wie of wat?");
-            Thread.Sleep(2500);
-            player.SetLastChoice("dorp");
+            Text.Narrator("Je hebt de schat govonden en bent nu rijk!");
         }
         else
         {
-            Text.Narrator("Dat is geen geldige keuze.");
+            Text.Narrator("GAME OVER");
+            Thread.Sleep(1500);
+            Text.Narrator("Jouw reis eindigt hier...");
+            
+            if (!string.IsNullOrEmpty(deathMessage))
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine(deathMessage);
+                Console.ResetColor();
+            }
+            
             Thread.Sleep(2000);
-            question1();
+            Text.Narrator("De duisternis sluit zich om je heen...");
         }
-    }
-
-    private void question2()
-    {
-        GameHelper.showLoading();
-        Console.Clear();
-        Text.WriteGameName();
-        Thread.Sleep(1000);
         
-        switch (player.GetLastChoice())
-        {
-            case "grot":
-                Text.Narrator("In de grot zie je een vreemde fakkel aan de muur hangen.");
-                Thread.Sleep(3000);
-                
-                Text.Narrator("Pak je de fakkel? (ja/nee)");
-                string? choice = Console.ReadLine().ToLower();
-                Console.Clear();
-                
-                if (choice == "ja" || choice == "j")
-                {
-                    Text.Narrator("Je pakt de fakkel en steekt hem aan.");
-                    Thread.Sleep(2000);
-                    player.AddToInventory("Fakkel", 1);
-                    player.SetLastChoice("ja");
-                }
-                else if (choice == "nee" || choice == "n")
-                {
-                    Text.Narrator("Je besluit de fakkel te laten hangen.");
-                    Thread.Sleep(2000);
-                    player.SetLastChoice("nee");
-                }
-                else
-                {
-                    Text.Narrator("Dat is geen geldige keuze.");
-                    Thread.Sleep(2000);
-                    question2();
-                }
-                break;
-
-            case "dorp":
-                Text.Narrator("In het dorp sta je voor een oude herberg en een donkere steeg.");
-                Thread.Sleep(3000);
-                
-                Text.Narrator("Wat kies je? Typ '1' voor de herberg of '2' voor de steeg.");
-                choice = Console.ReadLine().ToLower();
-                
-                if (choice == "1")
-                {
-                    Text.Narrator("Je kiest voor de herberg en betreedt het donkere gebouw.");
-                    Thread.Sleep(2000);
-                    player.SetLastChoice("herberg");
-                }
-                else if (choice == "2")
-                {
-                    Text.Narrator("Je kiest de steeg en hoort vreemde geluiden achter je.");
-                    Thread.Sleep(2000);
-                    player.SetLastChoice("steeg");
-                }
-                else
-                {
-                    Text.Narrator("Dat is geen geldige keuze.");
-                    Thread.Sleep(2000);
-                    question2();
-                }
-                break;
-        }
-    }
-
-    private void question3()
-    {
-        GameHelper.showLoading();
-        Console.Clear();
-        Text.WriteGameName();
-        Thread.Sleep(1000);
-
-        switch (player.GetLastChoice())
-        {
-            case "ja":
-                Text.Narrator("Je komt vast te zitten in de grot en hoort iets groots bewegen in de duisternis.");
-                Thread.Sleep(3000);
-                
-                Text.Narrator("Wat doe je? Klim je omhoog, verstop je je of gooi je de fakkel als afleiding?");
-                Console.WriteLine("Typ 'klimmen', 'verstoppen' of 'gooien': ");
-                string choice = Console.ReadLine().ToLower();
-                Console.Clear();
-                
-                if (choice == "klimmen")
-                {
-                    Text.Narrator("Je klimt omhoog naar de opening en ontsnapt uit de grot.");
-                    Thread.Sleep(2000);
-                    player.SetLastChoice("klimmen");
-                }
-                else if (choice == "verstoppen")
-                {
-                    Text.Narrator("Je verstopt je, maar het wezen vindt je toch.");
-                    Thread.Sleep(2000);
-                    player.SetLastChoice("verstoppen");
-                }
-                else if (choice == "gooien")
-                {
-                    Text.Narrator("Je gooit de fakkel als afleiding en rent weg.");
-                    Thread.Sleep(2000);
-                    player.RemoveFromInventory("Fakkel", 1);
-                    player.SetLastChoice("gooien");
-                }
-                Thread.Sleep(2000);
-                break;
-            case "nee":
-                Text.Narrator("Je komt vast te zitten in de grot en hoort iets groots bewegen in de duisternis.");
-                Thread.Sleep(3000);
-                
-                Text.Narrator("Wat doe je? Klim je omhoog of verstop je je?");
-                choice = Console.ReadLine().ToLower();
-                
-                if (choice == "klimmen")
-                {
-                    Text.Narrator("Je klimt omhoog naar de opening en ontsnapt uit de grot.");
-                    Thread.Sleep(2000);
-                    player.SetLastChoice("klimmen");
-                }
-                else if (choice == "verstoppen")
-                {
-                    Text.Narrator("Je verstopt je, maar het wezen vindt je toch.");
-                    Thread.Sleep(2000);
-                    player.SetLastChoice("verstoppen");
-                }
-                break;
-
-            case "dorp":
-                break;
-        }
+        Thread.Sleep(2000);
+        Text.Narrator("Bedankt voor het spelen!");
+        _isRunning = false;
     }
 }
